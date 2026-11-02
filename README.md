@@ -44,3 +44,6 @@ python3 scripts/fix_md_links.py skills --root <你的数据根> --fix --all
 - `SKILL.md` —— 完整流程（摸依赖面 → git mv → 修引用 → 验证 → 同步）与判据
 - `references/` —— 分场景细节：引用形态、改名操作、编号重排、重写与踩坑
 - `scripts/` —— 上面那三个脚本
+
+## 姊妹仓库
+
