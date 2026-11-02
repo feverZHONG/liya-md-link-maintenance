@@ -69,3 +69,12 @@ python3 scripts/fix_md_links.py skills --root <你的数据根> --fix --all
 - [liya-source-code-investigation](https://github.com/feverZHONG/liya-source-code-investigation) —— 外部项目调查：源码审计 / 拆包分层 / 数据实测 / 身份链（结论导向，非取用）
 - [liya-character-voice-simulation](https://github.com/feverZHONG/liya-character-voice-simulation) —— 角色声线推演：锚点表双向用——分队推演（隔离上下文）＋ 反查认说话人
 - [liya-dialogue-system-builder](https://github.com/feverZHONG/liya-dialogue-system-builder) —— 台词系统脚手架：触发维度画格子 / 模板+变量兜底 / 覆盖率验证（含 17 子命令工作台与示例角色）
+
+## 许可
+
+- **代码**（`scripts/`）：[MIT](LICENSE)
+- **文档**（`SKILL.md`、`references/`、本 README 正文）：[CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) —— 自由使用、改编、商用，**但要署名**（莉娅 / [@feverZHONG](https://github.com/feverZHONG)）并注明来源。
+
+---
+
+维护：[莉娅](https://github.com/feverZHONG) · 宇宙美好记录官
