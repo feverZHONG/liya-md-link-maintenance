@@ -1,12 +1,17 @@
-# md-link-maintenance
+# 文档库引用链维护 · md-link-maintenance
 
-> 移动/分目录 md 文件时修引用断链、防链接失效。触发：重构文档库、移动 md、担心引用断、references 孤儿档核查。
+> md 文件被移动、改名、分目录之后，反引号里的相对引用会**静默断掉**——没有报错，只有下次按图索骥时撞墙。
+> 这套东西管三件事：**断链扫描与自动修复、markdown 链接校验、整个文档库重构时的安全流程**。
 
 ## 这是什么
 
-移动/分目录 md 文件时修引用断链、防链接失效。触发：重构文档库、移动 md、担心引用断、references 孤儿档核查。
+任何靠「文件 + 引用」组织起来的 md 库都会遇到这个问题：拆薄一个 skill、把 references 按主题分目录、把一篇长文拆成几章——文件一动，引用就断。手工找断链靠不住（一次能漏几十条），所以这里给了三个脚本和一套流程。
 
-本仓是 skill 目录的镜像（`SKILL.md` ＋ `references/` ＋ `scripts/`）；`README.md`／`LICENSE`／`LICENSE-DOCS` 是仓库专属文件，不参与本地同步。
+| 脚本 | 管什么 |
+|:--|:--|
+| `scripts/fix_md_links.py` | 扫描并修复**反引号**形式的 `.md` 相对引用（`references/a.md`、裸名 `a.md`、`../b.md` 都查）；`--check` 只报不动，`--fix` 就地改 |
+| `scripts/check_md_links.py` | 校验标准 markdown 链接 `[文本](路径.md)`，只查不修 |
+| `scripts/classify_broken_refs.py` | 修不动的那些**按成因分档**（示例/占位残留、历史上存在过、真缺失），才知道先修哪档、哪些不用修 |
 
 ## 怎么用
 
@@ -16,38 +21,26 @@
 git clone https://github.com/feverZHONG/liya-md-link-maintenance.git <你的数据根>/skills/md-link-maintenance
 ```
 
-依赖与更细的用法见 `SKILL.md`。
+先扫一遍看看有多少：
 
-## 许可
+```bash
+python3 scripts/fix_md_links.py skills --root <你的数据根> --check --all
+```
 
-- `scripts/` 下的代码：**MIT**（全文见 `LICENSE`）
-- 文档（`SKILL.md`、`references/`、本 README 正文）：**CC BY 4.0**（全文见 `LICENSE-DOCS`）
+确认后修复：
 
-## 姊妹仓库
+```bash
+python3 scripts/fix_md_links.py skills --root <你的数据根> --fix --all
+```
 
-- [liya-subtraction-skill](https://github.com/feverZHONG/liya-subtraction-skill)
-- [liya-persona-authoring](https://github.com/feverZHONG/liya-persona-authoring)
-- [liya-sillytavern-cards](https://github.com/feverZHONG/liya-sillytavern-cards)
-- [liya-sillytavern-worldbook](https://github.com/feverZHONG/liya-sillytavern-worldbook)
-- [liya-vision-recognition-traps](https://github.com/feverZHONG/liya-vision-recognition-traps)
-- [liya-chat-game-referee](https://github.com/feverZHONG/liya-chat-game-referee)
-- [liya-spy-game](https://github.com/feverZHONG/liya-spy-game)
-- [liya-sea-turtle-soup](https://github.com/feverZHONG/liya-sea-turtle-soup)
-- [liya-delegation-and-verification](https://github.com/feverZHONG/liya-delegation-and-verification)
-- [liya-tavern-card-refinement](https://github.com/feverZHONG/liya-tavern-card-refinement)
-- [liya-prose-quality-metrics](https://github.com/feverZHONG/liya-prose-quality-metrics)
-- [liya-ruozhiba-wordbank](https://github.com/feverZHONG/liya-ruozhiba-wordbank)
-- [liya-subtitle-proofreading](https://github.com/feverZHONG/liya-subtitle-proofreading)
-- [liya-corpus-line-mining](https://github.com/feverZHONG/liya-corpus-line-mining)
-- [liya-story-revision-plan](https://github.com/feverZHONG/liya-story-revision-plan)
-- [liya-dev-workflow](https://github.com/feverZHONG/liya-dev-workflow)
-- [liya-news-verification](https://github.com/feverZHONG/liya-news-verification)
-- [liya-knowledge-persistence](https://github.com/feverZHONG/liya-knowledge-persistence)
-- [liya-incident-review](https://github.com/feverZHONG/liya-incident-review)
-- [liya-source-code-investigation](https://github.com/feverZHONG/liya-source-code-investigation)
-- [liya-character-voice-simulation](https://github.com/feverZHONG/liya-character-voice-simulation)
-- [liya-dialogue-system-builder](https://github.com/feverZHONG/liya-dialogue-system-builder)
+## 三条最容易踩的
 
----
+1. **位置参数是目录路径，不是 skill 名**——写 `fix_md_links.py 某个skill名` 会扫到 0 个文件、打印「checked 0 refs、可修 0」，看着像全对，其实是没扫到。
+2. **`--root` 决定「什么算跨库引用」**：库内统一用「库根相对」写法时，不带 `--root` 会把所有跨库引用当断链报——同一次扫描可能差出几百条假阳性，反之指错根也会漏。
+3. **「0 入链的孤儿档」不等于废料**：先查有没有脚本按路径模式读它、是不是内容型资料，再决定删不删。
 
-*莉娅（[@feverZHONG](https://github.com/feverZHONG)）· 宇宙美好记录官*
+## 目录
+
+- `SKILL.md` —— 完整流程（摸依赖面 → git mv → 修引用 → 验证 → 同步）与判据
+- `references/` —— 分场景细节：引用形态、改名操作、编号重排、重写与踩坑
+- `scripts/` —— 上面那三个脚本
