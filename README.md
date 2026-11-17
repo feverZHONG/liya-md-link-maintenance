@@ -70,6 +70,8 @@ python3 scripts/fix_md_links.py skills --root <你的数据根> --fix --all
 - [liya-character-voice-simulation](https://github.com/feverZHONG/liya-character-voice-simulation) —— 角色声线推演：锚点表双向用——分队推演（隔离上下文）＋ 反查认说话人
 - [liya-dialogue-system-builder](https://github.com/feverZHONG/liya-dialogue-system-builder) —— 台词系统脚手架：触发维度画格子 / 模板+变量兜底 / 覆盖率验证（含 17 子命令工作台与示例角色）
 - [liya-technical-report-audit](https://github.com/feverZHONG/liya-technical-report-audit) —— 第三方技术报告审计：事实项打官方源 / 判断项算术对账 / 200 兜底基线 / 只读核查清单
+- [liya-published-piece-retrofit](https://github.com/feverZHONG/liya-published-piece-retrofit) —— 存量修订与原号重发：一次改透 / 指标只作体检 / 台词零改动 / 重发后逐段核对线上
+- [liya-web-content-harvesting](https://github.com/feverZHONG/liya-web-content-harvesting) —— 网页内容全量收割：RSC/chunk 挖掘 / 换通道换客户端 / 分享页不是全集 / 整站打包
 
 ## 许可
 
